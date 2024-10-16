@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción de Modelo Keras</title>
+</head>
+<body>
+    <h1>Sube una imagen para hacer una predicción</h1>
+    <input type="file" id="file-input" />
+    <button id="submit-button">Enviar</button>
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('submit-button').onclick = async () => {
+            const fileInput = document.getElementById('file-input');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = `Predicción: ${result.predicted_class}`;
+        };
+    </script>
+</body>
+</html>
