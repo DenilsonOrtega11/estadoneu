@@ -31,5 +31,9 @@ if img is not None and st.button("Predecir"):
 
     predictions = model.predict(img_array)
     predicted_class = np.argmax(predictions)
-    st.write(f"Predicción: {predicted_class}")
+    if(predicted_class==1):
+        st.write(f"Predicción: El neumatico esta en buenas condiciones para ser usado.")
+    else:
+        st.write(f"Predicción: El neumatico NO esta en buenas condiciones.")
+    
 
