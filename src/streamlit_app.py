@@ -6,7 +6,7 @@ import numpy as np
 # Cargar el modelo
 model = tf.keras.models.load_model('mnist-cnn.keras')
 
-st.title("Predicción de Modelo Keras")
+st.title("Analizador de estado de neumaticos")
 
 # Opción para cargar imagen desde archivo
 uploaded_file = st.file_uploader("Elige una imagen...", type="jpg")
