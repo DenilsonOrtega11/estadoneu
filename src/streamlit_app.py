@@ -15,15 +15,19 @@ def cargar_modelo(model_file):
 
         # Verificamos si el archivo tiene una extensión válida (.h5 o .keras)
         if temp_file_path.endswith(('.h5', '.keras')):
-            # Cargar el modelo Keras (.h5 o .keras)
-            model = tf.keras.models.load_model(temp_file_path)
-            st.write("Modelo Keras cargado correctamente.")
-            return model
+            # Intentamos cargar el modelo Keras (.h5 o .keras)
+            try:
+                model = tf.keras.models.load_model(temp_file_path)
+                st.write("Modelo Keras cargado correctamente.")
+                return model
+            except Exception as e:
+                st.error(f"Error al cargar el modelo Keras: {str(e)}")
+                return None
         else:
             st.error("El archivo subido no es un modelo válido de Keras (.h5 o .keras).")
             return None
     except Exception as e:
-        st.error(f"Error al cargar el modelo: {str(e)}")
+        st.error(f"Error al procesar el archivo: {str(e)}")
         return None
 
 st.title("Analizador de estado de neumáticos")
