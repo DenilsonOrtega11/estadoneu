@@ -2,7 +2,6 @@ import streamlit as st
 import tensorflow as tf
 from PIL import Image
 import numpy as np
-from io import BytesIO
 import tempfile
 import os
 
@@ -10,35 +9,27 @@ import os
 def cargar_modelo(model_file):
     try:
         # Guardamos el archivo en un archivo temporal
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_file_path = os.path.join(temp_dir, 'model')
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file_path = temp_file.name
+            temp_file.write(model_file.read())  # Escribimos el contenido del archivo en el archivo temporal
 
-            # Guardamos el archivo subido en el directorio temporal
-            with open(temp_file_path, 'wb') as f:
-                f.write(model_file.read())
-            
-            # Verificamos si el archivo es un SavedModel (directorio)
-            if os.path.isdir(temp_file_path):
-                # Intentamos cargar el SavedModel
-                try:
-                    model = tf.saved_model.load(temp_file_path)
-                    st.write("Modelo SavedModel cargado correctamente.")
-                    return model
-                except Exception as e:
-                    st.error(f"Error al cargar el modelo SavedModel: {str(e)}")
-                    return None
-            else:
-                # Si no es un SavedModel, lo tratamos como un archivo Keras .h5 o .keras
-                model = tf.keras.models.load_model(temp_file_path)  # Intentar cargar como .h5 o .keras
-                return model
+        # Verificamos si el archivo tiene una extensión válida (.h5 o .keras)
+        if temp_file_path.endswith(('.h5', '.keras')):
+            # Cargar el modelo Keras (.h5 o .keras)
+            model = tf.keras.models.load_model(temp_file_path)
+            st.write("Modelo Keras cargado correctamente.")
+            return model
+        else:
+            st.error("El archivo subido no es un modelo válido de Keras (.h5 o .keras).")
+            return None
     except Exception as e:
         st.error(f"Error al cargar el modelo: {str(e)}")
         return None
 
 st.title("Analizador de estado de neumáticos")
 
-# Opción para cargar un modelo propio
-uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras o SavedModel)", type=["h5", "keras", "pb", "zip"])
+# Opción para cargar un modelo propio (solo .h5 o .keras)
+uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras)", type=["h5", "keras"])
 
 # Cargar el modelo predeterminado si no se sube ninguno
 if uploaded_model is not None:
