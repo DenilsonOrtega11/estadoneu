@@ -3,11 +3,18 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 from io import BytesIO
+import tempfile
 
 # Función para cargar el modelo desde un archivo en memoria
 def cargar_modelo(model_file):
     try:
-        model = tf.keras.models.load_model(BytesIO(model_file.read()))
+        # Guardamos el archivo en un archivo temporal
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(model_file.read())
+            temp_file_path = temp_file.name
+        
+        # Ahora cargamos el modelo desde el archivo temporal
+        model = tf.keras.models.load_model(temp_file_path)
         return model
     except Exception as e:
         st.error(f"Error al cargar el modelo: {str(e)}")
