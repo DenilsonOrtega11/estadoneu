@@ -8,26 +8,17 @@ import os
 # Función para cargar el modelo desde un archivo en memoria
 def cargar_modelo(model_file):
     try:
-        # Guardamos el archivo en un archivo temporal
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        # Crear un archivo temporal en disco
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.keras') as temp_file:
             temp_file_path = temp_file.name
-            temp_file.write(model_file.read())  # Escribimos el contenido del archivo en el archivo temporal
+            temp_file.write(model_file.read())  # Escribir el contenido del archivo cargado
 
-        # Verificamos si el archivo tiene una extensión válida (.h5 o .keras)
-        if temp_file_path.endswith(('.h5', '.keras')):
-            # Intentamos cargar el modelo Keras (.h5 o .keras)
-            try:
-                model = tf.keras.models.load_model(temp_file_path)
-                st.write("Modelo Keras cargado correctamente.")
-                return model
-            except Exception as e:
-                st.error(f"Error al cargar el modelo Keras: {str(e)}")
-                return None
-        else:
-            st.error("El archivo subido no es un modelo válido de Keras (.h5 o .keras).")
-            return None
+        # Intentar cargar el modelo Keras desde el archivo temporal
+        model = tf.keras.models.load_model(temp_file_path)
+        st.write("Modelo Keras cargado correctamente.")
+        return model
     except Exception as e:
-        st.error(f"Error al procesar el archivo: {str(e)}")
+        st.error(f"Error al cargar el modelo Keras: {str(e)}")
         return None
 
 st.title("Analizador de estado de neumáticos")
@@ -58,14 +49,14 @@ camera_input = st.camera_input("Captura una imagen")
 if uploaded_file is not None:
     try:
         img = Image.open(uploaded_file)
-        st.image(img, caption='Imagen cargada.', use_column_width=True)
+        st.image(img, caption='Imagen cargada.', use_container_width=True)  # Cambiado aquí
     except Exception as e:
         st.error(f"Error al cargar la imagen: {str(e)}")
         img = None
 elif camera_input is not None:  # Procesar la imagen desde la cámara
     try:
         img = Image.open(camera_input)
-        st.image(img, caption='Imagen capturada.', use_column_width=True)
+        st.image(img, caption='Imagen capturada.', use_container_width=True)  # Cambiado aquí
     except Exception as e:
         st.error(f"Error al capturar la imagen: {str(e)}")
         img = None
