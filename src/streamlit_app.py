@@ -12,9 +12,15 @@ def cargar_modelo(model_file):
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(model_file.read())
             temp_file_path = temp_file.name
-        
-        # Ahora cargamos el modelo desde el archivo temporal
-        model = tf.keras.models.load_model(temp_file_path)
+
+        # Intentar cargar el modelo
+        try:
+            model = tf.keras.models.load_model(temp_file_path)  # Intentar cargar como .h5 o .keras
+        except Exception as e:
+            # Si falla, intenta cargar como SavedModel
+            st.warning("Modelo en formato SavedModel detectado, cargando con TFSMLayer.")
+            model = tf.keras.layers.TFSMLayer(temp_file_path, call_endpoint='serving_default')
+
         return model
     except Exception as e:
         st.error(f"Error al cargar el modelo: {str(e)}")
@@ -23,7 +29,7 @@ def cargar_modelo(model_file):
 st.title("Analizador de estado de neumáticos")
 
 # Opción para cargar un modelo propio
-uploaded_model = st.file_uploader("Sube tu modelo (.h5 o .keras)", type=["h5", "keras"])
+uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras o SavedModel)", type=["h5", "keras", "pb"])
 
 # Cargar el modelo predeterminado si no se sube ninguno
 if uploaded_model is not None:
