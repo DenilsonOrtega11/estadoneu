@@ -4,24 +4,33 @@ from PIL import Image
 import numpy as np
 from io import BytesIO
 import tempfile
+import os
 
 # Función para cargar el modelo desde un archivo en memoria
 def cargar_modelo(model_file):
     try:
         # Guardamos el archivo en un archivo temporal
-        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-            temp_file.write(model_file.read())
-            temp_file_path = temp_file.name
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file_path = os.path.join(temp_dir, 'model')
 
-        # Intentar cargar el modelo
-        try:
-            model = tf.keras.models.load_model(temp_file_path)  # Intentar cargar como .h5 o .keras
-        except Exception as e:
-            # Si falla, intenta cargar como SavedModel
-            st.warning("Modelo en formato SavedModel detectado, cargando con TFSMLayer.")
-            model = tf.keras.layers.TFSMLayer(temp_file_path, call_endpoint='serving_default')
-
-        return model
+            # Guardamos el archivo subido en el directorio temporal
+            with open(temp_file_path, 'wb') as f:
+                f.write(model_file.read())
+            
+            # Verificamos si el archivo es un SavedModel (directorio)
+            if os.path.isdir(temp_file_path):
+                # Intentamos cargar el SavedModel
+                try:
+                    model = tf.saved_model.load(temp_file_path)
+                    st.write("Modelo SavedModel cargado correctamente.")
+                    return model
+                except Exception as e:
+                    st.error(f"Error al cargar el modelo SavedModel: {str(e)}")
+                    return None
+            else:
+                # Si no es un SavedModel, lo tratamos como un archivo Keras .h5 o .keras
+                model = tf.keras.models.load_model(temp_file_path)  # Intentar cargar como .h5 o .keras
+                return model
     except Exception as e:
         st.error(f"Error al cargar el modelo: {str(e)}")
         return None
@@ -29,7 +38,7 @@ def cargar_modelo(model_file):
 st.title("Analizador de estado de neumáticos")
 
 # Opción para cargar un modelo propio
-uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras o SavedModel)", type=["h5", "keras", "pb"])
+uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras o SavedModel)", type=["h5", "keras", "pb", "zip"])
 
 # Cargar el modelo predeterminado si no se sube ninguno
 if uploaded_model is not None:
