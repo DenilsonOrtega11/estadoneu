@@ -49,14 +49,14 @@ camera_input = st.camera_input("Captura una imagen")
 if uploaded_file is not None:
     try:
         img = Image.open(uploaded_file)
-        st.image(img, caption='Imagen cargada.', use_container_width=True)  # Cambiado aquí
+        st.image(img, caption='Imagen cargada.', use_column_width=True)  # Cambiado aquí
     except Exception as e:
         st.error(f"Error al cargar la imagen: {str(e)}")
         img = None
 elif camera_input is not None:  # Procesar la imagen desde la cámara
     try:
         img = Image.open(camera_input)
-        st.image(img, caption='Imagen capturada.', use_container_width=True)  # Cambiado aquí
+        st.image(img, caption='Imagen capturada.', use_column_width=True)  # Cambiado aquí
     except Exception as e:
         st.error(f"Error al capturar la imagen: {str(e)}")
         img = None
