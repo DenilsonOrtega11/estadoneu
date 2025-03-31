@@ -6,14 +6,10 @@ import tempfile
 import os
 
 # Configuración de la página
-st.set_page_config(page_title="Detector", page_icon="🛞", layout="wide")
+st.set_page_config(page_title="Detector", page_icon="https://www.flaticon.es/icono-gratis/fuga_8409019?term=llanta&page=1&position=24&origin=tag&related_id=8409019", layout="wide")
 
 # Título de la aplicación
 st.title("Detector de Estado de Neumáticos")
-
-# Mostrar la imagen de una llanta (si tienes un archivo o usa un enlace)
-image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Tire_symbol_%28Pictogram%29.svg/1024px-Tire_symbol_%28Pictogram%29.svg.png"  # URL de la imagen de la llanta
-st.image(image_url, caption="Imagen representativa de un neumático", use_column_width=True)
 
 # Agregar un enlace para descargar el archivo de entrenamiento del modelo en la parte superior
 st.markdown(
@@ -28,7 +24,7 @@ st.markdown(
 st.markdown(f'<a href="https://mega.nz/file/sNBn2ZbD#ZbBZRKs0D9s8-y0ql71iP7MzMKcf0NIDWysTVAZc_3w" download>Descargar Modelo de Entrenamiento</a>', unsafe_allow_html=True)
 
 # Leyenda para el modelo predeterminado
-st.markdown("**Nota**: Si no cargas un modelo personalizado, se está utilizando el modelo predeterminado de `mnist-cnn.keras`.")
+st.markdown("**Nota**: Si no cargas un modelo personalizado, se está utilizando el modelo predeterminado.")
 
 # Función para cargar el modelo desde un archivo en memoria
 def cargar_modelo(model_file):
