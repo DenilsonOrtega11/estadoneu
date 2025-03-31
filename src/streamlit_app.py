@@ -5,6 +5,31 @@ import numpy as np
 import tempfile
 import os
 
+# Configuración de la página
+st.set_page_config(page_title="Detector", page_icon="🛞", layout="wide")
+
+# Título de la aplicación
+st.title("Detector de Estado de Neumáticos")
+
+# Mostrar la imagen de una llanta (si tienes un archivo o usa un enlace)
+image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Tire_symbol_%28Pictogram%29.svg/1024px-Tire_symbol_%28Pictogram%29.svg.png"  # URL de la imagen de la llanta
+st.image(image_url, caption="Imagen representativa de un neumático", use_column_width=True)
+
+# Agregar un enlace para descargar el archivo de entrenamiento del modelo en la parte superior
+st.markdown(
+    """
+    ### Descarga el modelo de entrenamiento:
+    Si deseas entrenar tu propio modelo con tu propio repositorio con un entrenador previamente desarrollado, puedes descargarlo desde el siguiente enlace:
+    """,
+    unsafe_allow_html=True
+)
+
+# Crear un enlace para descargar el archivo
+st.markdown(f'<a href="https://mega.nz/file/sNBn2ZbD#ZbBZRKs0D9s8-y0ql71iP7MzMKcf0NIDWysTVAZc_3w" download>Descargar Modelo de Entrenamiento</a>', unsafe_allow_html=True)
+
+# Leyenda para el modelo predeterminado
+st.markdown("**Nota**: Si no cargas un modelo personalizado, se está utilizando el modelo predeterminado de `mnist-cnn.keras`.")
+
 # Función para cargar el modelo desde un archivo en memoria
 def cargar_modelo(model_file):
     try:
@@ -20,22 +45,6 @@ def cargar_modelo(model_file):
     except Exception as e:
         st.error(f"Error al cargar el modelo Keras: {str(e)}")
         return None
-
-# Título de la aplicación
-st.title("Detector de Estado de Neumáticos")
-
-# Agregar un enlace para descargar el archivo de entrenamiento del modelo en la parte superior
-st.markdown(
-    """
-    ### Descarga el modelo de entrenamiento:
-    Si deseas entrenar tu propio modelo con tu propio repositorio con un entrenador previamente desarrollado, puedes descargarlo desde el siguiente enlace:
-    """,
-    unsafe_allow_html=True
-)
-
-# Crear un enlace para descargar el archivo
-file_path = "path_to_your_model_or_training_file.zip"  # Reemplaza con la ruta correcta al archivo
-st.markdown(f'<a href="https://mega.nz/file/sNBn2ZbD#ZbBZRKs0D9s8-y0ql71iP7MzMKcf0NIDWysTVAZc_3w" download>Descargar Modelo de Entrenamiento</a>', unsafe_allow_html=True)
 
 # Opción para cargar un modelo propio (solo .h5 o .keras)
 uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras)", type=["h5", "keras"])
