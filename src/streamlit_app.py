@@ -6,7 +6,7 @@ import tempfile
 import os
 
 # Configuración de la página
-st.set_page_config(page_title="Detector", page_icon="https://www.flaticon.es/icono-gratis/fuga_8409019?term=llanta&page=1&position=24&origin=tag&related_id=8409019", layout="wide")
+st.set_page_config(page_title="Detector", page_icon="🛞", layout="wide")
 
 # Título de la aplicación
 st.title("Detector de Estado de Neumáticos")
