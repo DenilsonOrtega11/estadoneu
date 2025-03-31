@@ -21,7 +21,7 @@ st.markdown(
 )
 
 # Crear un enlace para descargar el archivo
-st.markdown(f'<a href="https://mega.nz/file/sNBn2ZbD#ZbBZRKs0D9s8-y0ql71iP7MzMKcf0NIDWysTVAZc_3w" download>Descargar Modelo de Entrenamiento</a>', unsafe_allow_html=True)
+st.markdown(f'<a href="https://mega.nz/file/sNBn2ZbD#ZbBZRKs0D9s8-y0ql71iP7MzMKcf0NIDWysTVAZc_3w" download>Descargar Entrenador</a>', unsafe_allow_html=True)
 
 # Leyenda para el modelo predeterminado
 st.markdown("**Nota**: Si no cargas un modelo personalizado, se está utilizando el modelo predeterminado.")
