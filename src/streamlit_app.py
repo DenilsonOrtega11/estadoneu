@@ -21,7 +21,21 @@ def cargar_modelo(model_file):
         st.error(f"Error al cargar el modelo Keras: {str(e)}")
         return None
 
-st.title("Analizador de estado de neumáticos")
+# Título de la aplicación
+st.title("Detector de Estado de Neumáticos")
+
+# Agregar un enlace para descargar el archivo de entrenamiento del modelo en la parte superior
+st.markdown(
+    """
+    ### Descarga el modelo de entrenamiento:
+    Si deseas entrenar tu propio modelo con tu propio repositorio con un entrenador previamente desarrollado, puedes descargarlo desde el siguiente enlace:
+    """,
+    unsafe_allow_html=True
+)
+
+# Crear un enlace para descargar el archivo
+file_path = "path_to_your_model_or_training_file.zip"  # Reemplaza con la ruta correcta al archivo
+st.markdown(f'<a href="https://mega.nz/file/sNBn2ZbD#ZbBZRKs0D9s8-y0ql71iP7MzMKcf0NIDWysTVAZc_3w" download>Descargar Modelo de Entrenamiento</a>', unsafe_allow_html=True)
 
 # Opción para cargar un modelo propio (solo .h5 o .keras)
 uploaded_model = st.file_uploader("Sube tu modelo (.h5, .keras)", type=["h5", "keras"])
